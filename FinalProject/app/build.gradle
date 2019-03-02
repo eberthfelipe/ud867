@@ -11,16 +11,16 @@ buildscript {
 }
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         applicationId "com.udacity.gradle.builditbigger"
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        multiDexEnabled true
+//        multiDexEnabled true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -31,20 +31,49 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "version"
+    productFlavors {
+        free {
+            dimension "version"
+            applicationIdSuffix ".free"
+            versionNameSuffix "-free"
+        }
+        paid {
+            dimension "version"
+            applicationIdSuffix ".paid"
+            versionNameSuffix "-paid"
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     endpointsServer project(path: ':backend', configuration: 'endpoints')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.google.android.gms:play-services-ads:11.8.0'
+    implementation project(':androidlibrary')
+    implementation project(path: ':libJoker')
+
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation "com.android.support:customtabs:28.0.0"
+    implementation "com.android.support:support-media-compat:28.0.0"
+    implementation "com.android.support:support-v4:28.0.0"
+
+    freeImplementation 'com.google.android.gms:play-services-ads:17.1.3'
+
     implementation 'com.google.api-client:google-api-client:1.23.0'
     implementation 'com.google.http-client:google-http-client-android:1.23.0'
-    implementation 'com.google.code.findbugs:jsr305:3.0.1'
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    // Testing
     testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support:support-annotations:28.0.0'
+    androidTestImplementation 'org.mockito:mockito-android:2.7.22'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
 }
